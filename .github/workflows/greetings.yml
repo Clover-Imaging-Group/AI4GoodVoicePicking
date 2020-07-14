@@ -10,4 +10,4 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: 'Thank you for actively participating in AI4GoodVoicePicking and creating your first issue!'
-        pr-message: 'Exiting! Than you for creating your first Pull Request for AI4GoodVoicePicking.'
+        pr-message: 'Exiting! Thank you for creating your first Pull Request for AI4GoodVoicePicking.'
