@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AI4Good.ViewModels"
+             mc:Ignorable="d"
+             x:Class="AI4Good.MainPage" BackgroundColor="White" NavigationPage.HasNavigationBar="False">
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel  x:Name="MainPageVM"/>
+    </ContentPage.BindingContext>
+
+
+    <Grid >
+        <Image Source="splashscreen" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFit" Margin="60,60,60,80"/>
+        <!-- Place new controls here -->
+        <Label Text="Empowering warehouse teams to increase productivity and culture through AI by providing job opportunities for adults with disabilities." 
+            VerticalOptions="End" HorizontalOptions="Center" Margin="10,0,10,50" HorizontalTextAlignment="Center" TextColor="Black"/>
+        <Button Text="START DEMO"  VerticalOptions="End" HorizontalOptions="Center" Command="{Binding StartDemoCommand}"></Button>
+    </Grid>
+
+</ContentPage>
