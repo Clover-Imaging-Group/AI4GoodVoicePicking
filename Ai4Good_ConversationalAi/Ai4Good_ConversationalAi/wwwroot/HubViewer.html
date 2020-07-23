@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <audio id="voiceAudio" src="data:audio/ogg;base64," autoplay></audio>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-2">User</div>
+            <div class="col-4"><input type="text" id="userInput" /></div>
+        </div>
+        <div class="row">
+            <div class="col-2">Message</div>
+            <div class="col-4"><input type="text" id="messageInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-6">
+                <input type="button" id="sendButton" value="Send Message" />
+            </div>
+            <div class="col-6">
+                <input type="button" id="ttsButton" value="Text To Speech" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <table id="logDisplay" class="table col-12">
+                <thead>
+                    <tr>
+                        <th scope="col" class="col-3">
+                            Source
+                        </th>
+                        <th scope="col" class="col-3">
+                            Time Stamp
+                        </th>
+                        <th scope="col" style="width:100%;">
+                            Message
+                        </th>
+                    </tr>
+                </thead>
+                <!--<tr id="logDisplayMessages">
+
+                </tr>-->
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="../lib/microsoft-signalr/signalr.js"></script>
+    <script src="../js/SignalRCom.js"></script>
+    <script src="../js/Speech.js"></script>
+
+</body>
+</html>
