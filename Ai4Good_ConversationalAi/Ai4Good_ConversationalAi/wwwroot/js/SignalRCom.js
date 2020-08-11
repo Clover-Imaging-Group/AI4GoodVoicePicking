@@ -17,7 +17,7 @@ connection.on("Log", function (user, message, utcTime) {
 });
 connection.on("Text2SpeechResponse", function (user, message) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var tds = `<tr><td>${user}</td><td>%nbsp</td><td>${msg}<br/><Button onclick="PlayBase64Audio('${msg}')">Play Speech</Button></td></tr>`;
+    var tds = `<tr><td>${user}</td><td>&nbsp;</td><td>${msg}<br/><Button onclick="PlayBase64Audio('${msg}')">Play Speech</Button></td></tr>`;
     $("#logDisplay").append($('<tbody>').append(tds));
 });
 
