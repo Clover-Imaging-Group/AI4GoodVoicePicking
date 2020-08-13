@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "hostingPlanName": {
+    "projectName": {
       "type": "string",
       "minLength": 1
     },
@@ -82,28 +82,29 @@
     }
   },
   "variables": {
-    "webSiteName": "[concat('oosAi4GoodWebApp-', uniqueString(resourceGroup().id))]",
-    "webSiteNameQna": "[concat('oosAi4GoodQna-', uniqueString(resourceGroup().id))]",
-    "qnaMakerName": "[concat('oosAi4GoodQnaMaker-', uniqueString(resourceGroup().id))]",
-    "accounts_oosAi4Good_LUIS_name": "[concat('oosAi4Good-LUIS-', uniqueString(resourceGroup().id))]",
-    "accounts_oosAi4Good_LUIS_Authoring_name": "[concat('oosAi4Good-LUIS-Authoring-', uniqueString(resourceGroup().id))]",
-    "accounts_oosAi4Good_Speech_name": "[concat('oosAi4Good-Speech-', uniqueString(resourceGroup().id))]"
+    "hostingPlanName": "[concat(parameters('projectName'),'-AppServicePlan-', uniqueString(resourceGroup().id))]",
+    "webSiteName": "[concat(parameters('projectName'),'-WebApp-', uniqueString(resourceGroup().id))]",
+    "webSiteNameQna": "[concat(parameters('projectName'),'-QnaApp-', uniqueString(resourceGroup().id))]",
+    "qnaMakerName": "[concat(parameters('projectName'),'-QnaMaker-', uniqueString(resourceGroup().id))]",
+    "accounts_oosAi4Good_LUIS_name": "[concat(parameters('projectName'),'-LUIS-', uniqueString(resourceGroup().id))]",
+    "accounts_oosAi4Good_LUIS_Authoring_name": "[concat(parameters('projectName'),'-LUIS-Authoring-', uniqueString(resourceGroup().id))]",
+    "accounts_oosAi4Good_Speech_name": "[concat(parameters('projectName'),'-Speech-', uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
       "apiVersion": "2015-08-01",
-      "name": "[parameters('hostingPlanName')]",
+      "name": "[variables('hostingPlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "oosAi4GoodAppServicePlan"
+        "displayName": "Ai4Good-AppServicePlan"
       },
       "sku": {
         "name": "[parameters('skuName')]",
         "capacity": "[parameters('skuCapacity')]"
       },
       "properties": {
-        "name": "[parameters('hostingPlanName')]"
+        "name": "[variables('hostingPlanName')]"
       }
     },
     {
@@ -112,15 +113,15 @@
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
-        "displayName": "oosAi4GoodWebApp"
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "Resource",
+        "displayName": "Ai4Good-WebApp"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
       ],
       "properties": {
         "name": "[variables('webSiteName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
       }
     },
     {
@@ -129,28 +130,28 @@
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
-        "displayName": "oosAi4GoodQna"
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "Resource",
+        "displayName": "Ai4Good-QnaApp"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
       ],
       "properties": {
         "name": "[variables('webSiteNameQna')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
       }
     },
     {
       "apiVersion": "2014-04-01",
-      "name": "[concat(parameters('hostingPlanName'), '-', resourceGroup().name)]",
+      "name": "[concat(variables('hostingPlanName'), '-', resourceGroup().name)]",
       "type": "Microsoft.Insights/autoscalesettings",
       "location": "[resourceGroup().location]",
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "Resource",
         "displayName": "AutoScaleSettings"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
       ],
       "properties": {
         "profiles": [
@@ -165,7 +166,7 @@
               {
                 "metricTrigger": {
                   "metricName": "CpuPercentage",
-                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
                   "timeWindow": "PT10M",
@@ -183,7 +184,7 @@
               {
                 "metricTrigger": {
                   "metricName": "CpuPercentage",
-                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
                   "timeWindow": "PT1H",
@@ -202,8 +203,8 @@
           }
         ],
         "enabled": false,
-        "name": "[concat(parameters('hostingPlanName'), '-', resourceGroup().name)]",
-        "targetResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "name": "[concat(variables('hostingPlanName'), '-', resourceGroup().name)]",
+        "targetResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
       }
     },
     {
@@ -216,7 +217,7 @@
       ],
       "tags": {
         "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
-        "displayName": "oosAi4GoodWeb_AppInsightsComponent"
+        "displayName": "Ai4Good-WebApp-AppInsightsComponent"
       },
       "properties": {
         "applicationId": "[variables('webSiteName')]"
@@ -232,7 +233,7 @@
       ],
       "tags": {
         "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteNameQna'))]": "Resource",
-        "displayName": "oosAi4GoodQna_AppInsightsComponent"
+        "displayName": "Ai4Good-QnaApp-AppInsightsComponent"
       },
       "properties": {
         "applicationId": "[variables('webSiteNameQna')]"
@@ -244,7 +245,7 @@
         "[resourceId('Microsoft.Web/sites/', variables('webSiteNameQna'))]"
       ],
       "tags": {
-        "displayName": "oosAi4GoodQnaMaker"
+        "displayName": "Ai4Good-QnaMaker"
       },
       "kind": "QnAMaker",
       "location": "West US",
@@ -264,7 +265,7 @@
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2017-04-18",
       "tags": {
-        "displayName": "oosAi4Good_LUIS"
+        "displayName": "Ai4Good-LUIS"
       },
 
       "name": "[variables('accounts_oosAi4Good_LUIS_name')]",
@@ -283,7 +284,7 @@
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2017-04-18",
       "tags": {
-        "displayName": "oosAi4Good_LUIS_Authoring"
+        "displayName": "Ai4Good-LUIS-Authoring"
       },
 
       "name": "[variables('accounts_oosAi4Good_LUIS_Authoring_name')]",
@@ -302,7 +303,7 @@
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2017-04-18",
       "tags": {
-        "displayName": "oosAi4Good_Speech"
+        "displayName": "Ai4Good-Speech"
       },
       "name": "[variables('accounts_oosAi4Good_Speech_name')]",
       "location": "eastus",
