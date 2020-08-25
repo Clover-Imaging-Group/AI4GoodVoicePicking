@@ -1,22 +1,18 @@
 # AI4GoodVoicePicking
 
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+AI 4 Good Voice Picking is an open-source project that uses exising Azure technologies to provide a simple voice driven interface for people with disabilities. It is intended to be easily expandable to any need, not just a warehouse picking process.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+1. Environment Setup
+1. Installation Process
+1. Configuration
+1. How To Use
 
 # Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+We will be implementation GitHub Actions for CI/CD for this project. We would suggest that folks fork the project and setup their own actions to push into their Azure tenant.
+TODO: Create Wiki entry on process and configuration of GitHub Actions
 
 # Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+As this is our first open-sourced project we're working on how best people can contribute. For the moment we'd suggest fork, change, test, and do a pull request. Remember testing is a bit different with a voice system! You'll want to talk to it.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
