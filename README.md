@@ -25,3 +25,7 @@ As this is our first open-sourced project we're working on how best people can c
 1. [Web App](docs/WEBAPP.md)
 1. [Face](docs/FACE.md) (optional)
 
+# Environment Configuration
+1. [LUIS Configuration](docs/LUISCONFIG.md)
+1. [QnA Maker Configuration](docs/QNACONFIG.md)
+
