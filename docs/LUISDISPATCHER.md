@@ -35,7 +35,21 @@
 ![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Luis_Dispatcher/Step_05.png)
 1. Scroll down to the bottom.
 1. Copy the following to the script below:
-	1. 
+![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Luis_Dispatcher/Step_06.png)
+	1. Select "Postman"
+	1. The first line under the Postman sample HTTP request should resemble the follow: POST /hnowledgebases/{GUID}/generateAnswer
+	1. Copy the {GUID} (#6) and paste into the Ai4GoodQnaExampleAppId section of the script.
+1. Use powershell to run the script.
+	1. Powershell will display something dimilar to the image below
+![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Luis_Dispatcher/Step_07.png)
+1. Login to [luis.ai](https://www.luis.ai/) it should use the same credentials as the Azure portal
+![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Luis_Ai/Step_01.png)
+1. Click on My Apps
+1. You should see a new dispatcher app.
+![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Luis_Dispatcher/Step_08.png)
+1. It should have intents for both the LUIS and QnA Maker example.
+![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Luis_Dispatcher/Step_09.png)
+1. Congratulations! You have completed the most difficult part of the configuration. 
 
 
 ## Powershell script
@@ -50,7 +64,7 @@ $Ai4GoodLuisDispatcherName = "Ai4Good-LUIS-Dispacther"
 $Ai4GoodLuisExampleName                 = "Ai4Good-LUIS-Example-1"   
 
 # (#2) luis.ai - Copied from the "Manage" section for the LUIS conversation  - App Id.
-$Ai4GoodLuisExampleAppId                = "cf0b8898-894e-433e-8862-2a3483898942" # 
+$Ai4GoodLuisExampleAppId                = "cf0b8898-894e-433e-8862-2a3483898942"
 
 # (#3) luis.ai - Copied from the "Manage" section for the LUIS conversation  - use the version number example 0.1
 $Ai4GoodLuisExampleVersion              = 0.1
