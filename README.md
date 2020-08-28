@@ -30,3 +30,6 @@ As this is our first open-sourced project we're working on how best people can c
 1. [LUIS Configuration](docs/LUISCONFIG.md)
 1. [LUIS Dispatcher](docs/LUISDISPATCHER.md)
 
+# Deploying The Sample Code
+1. [Updating appsettings.json](docs/APPSETTINGSJSON.md)
+1. [Ai4Good_ConversationalAi](docs/CONVERSATIONALAIDEPLOYMENT.md)
