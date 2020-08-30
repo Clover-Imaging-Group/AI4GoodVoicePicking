@@ -1,7 +1,7 @@
 # AI4GoodVoicePicking
 
 # Introduction 
-AI 4 Good Voice Picking is an open-source project that uses exising Azure technologies to provide a simple voice driven interface for people with disabilities. It is intended to be easily expandable to any need, not just a warehouse picking process.
+AI 4 Good Voice Picking is an open-source project that uses existing Azure technologies to provide a simple voice driven interface for people with disabilities. It is intended to be easily expandable to any need, not just a warehouse picking process.
 
 # Getting Started
 1. Environment Setup
