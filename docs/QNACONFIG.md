@@ -3,7 +3,7 @@
 ![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Qna_Maker/Step_01.png)
 1. Click "Create a knowledge base"
 ![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Qna_Maker/Step_02.png)
-1. STEP 1 - We hve alredy done this during setup.
+1. STEP 1 - We have alredy done this during setup.
 1. STEP 2 - Use the following:
 ![Resource Group Image 1](https://github.com/Clover-Imaging-Group/AI4GoodVoicePicking/blob/master/media/images/Qna_Maker/Step_03.png)
 
