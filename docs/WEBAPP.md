@@ -10,7 +10,7 @@
 	1. Select the subscription that you will be using to host the Web App.
 	1. Select the resource group to house the face resource.
 1. Instance Details
-	1. Name the face resource. We chose Ai4Good-Face
+	1. Name the web app resource. We chose Ai4Good-WebApp
 	1. Select "Code" for publish
 	1. Select ".NET Core 3.1 (LTS)" for the runtime stack.
 	1. Select an approate region reletave to your location.
