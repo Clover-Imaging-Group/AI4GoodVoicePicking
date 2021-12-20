@@ -12,7 +12,7 @@
 
 
     <Grid >
-        <Image Source="splashscreen" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFit" Margin="60,60,60,80"/>
+        <Image Source="splash_screen" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFit" Margin="60,60,60,80"/>
         <!-- Place new controls here -->
         <Label Text="Empowering warehouse teams to increase productivity and culture through AI by providing job opportunities for adults with disabilities." 
             VerticalOptions="End" HorizontalOptions="Center" Margin="10,0,10,50" HorizontalTextAlignment="Center" TextColor="Black"/>
