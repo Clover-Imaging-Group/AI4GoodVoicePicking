@@ -69,11 +69,13 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="45"/>
                         <RowDefinition Height="45"/>
+                        <RowDefinition Height="45"/>
                     </Grid.RowDefinitions>
-                    <Button Text="YES" Grid.Row="0" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding YesCommand}"></Button>
+                    <Button Text="YES" Grid.Row="2" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding YesCommand}"></Button>
                     <Button Text="NO" Grid.Row="0" Grid.Column="1" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding NoCommand}"></Button>
                     <Button Text="REPEAT" Grid.Row="1" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding RepeatCommand}"></Button>
                     <Button Text="HELP" Grid.Row="1" Grid.Column="1" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding HelpCommand}"></Button>
+                    <Button Text="{Binding CheckinButtonText}" Grid.Row="0" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding CheckinCommand}"></Button>
                 </Grid>
             </Grid>
             <Grid BackgroundColor="#FFFFFF" Grid.Column="1">

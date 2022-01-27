@@ -6,5 +6,10 @@ namespace AI4Good.Models
         public UserRole()
         {
         }
+
+        public Guid UserRoleID { get; set; }
+        public string Name { get; set; }
+        public string NormalizedName { get; set; }
+        public Guid ConcurrencyStamp { get; set; }
     }
 }

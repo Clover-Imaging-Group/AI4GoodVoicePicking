@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,7 +17,24 @@ namespace AI4Good.ViewModels
     public class DemoViewModel:BaseViewModel
     {
         #region properties
+        WebAPIService webAPIService;
         public ObservableCollection<Conversation> Conversations { get; set; }
+        public ObservableCollection<UserRole> UserRoles { get; set; }
+        public User User { get; set; }
+
+        string _checkinButtonText;
+        public string CheckinButtonText
+        {
+            get
+            {
+                return _checkinButtonText;
+            }
+            set
+            {
+                SetProperty(ref _checkinButtonText, value);
+            }
+        }
+
         string _currentSpeech;
         public string CurrentSpeech
         {
@@ -48,6 +66,7 @@ namespace AI4Good.ViewModels
         public DemoViewModel()
         {
             Conversations = new ObservableCollection<Conversation>();
+            UserRoles = new ObservableCollection<UserRole>();
             MuteText = "MUTE";
             InitializeCommands();
             InitializeAudioServices();
@@ -134,6 +153,7 @@ namespace AI4Good.ViewModels
             hubConnector.TTSResponseDelegate += HubConnector_TTSResponseDelegate;
             hubConnector.StartAsync();
             await Task.Delay(500);
+            CheckinButtonText = "CHECK-IN";
             CurrentSpeech = "We invite you to experience the future of AI that will empower your employees with disabilities to pick a warehouse order and inspire your team.";
             Conversations.Add(new Conversation { IsAI = true, Message = CurrentSpeech });
 
@@ -168,6 +188,7 @@ namespace AI4Good.ViewModels
         public Command NoCommand { get; set; }
         public Command RepeatCommand { get; set; }
         public Command HelpCommand { get; set; }
+        public Command CheckinCommand { get; set; }
         private void InitializeCommands()
         {
             MuteCommand = new Command(() => ExecuteMuteCommand());
@@ -175,6 +196,7 @@ namespace AI4Good.ViewModels
             NoCommand = new Command(() => ExecuteNoCommand());
             RepeatCommand = new Command(() => ExecuteRepeatCommand());
             HelpCommand = new Command(() => ExecuteHelpCommand());
+            CheckinCommand = new Command(() => ExecuteCheckinCommand());
         }
         private void ExecuteYesCommand()
         {
@@ -197,6 +219,36 @@ namespace AI4Good.ViewModels
             lastAIText = CurrentSpeech;
             Conversations.Add(new Conversation { IsAI = true, Message = lastAIText });
             hubConnector.GetText2Speech("XamarinDemoApp", CurrentSpeech);
+        }
+        private async void ExecuteCheckinCommand()
+        {
+            var speech = "Call made successfully";
+            webAPIService = new WebAPIService();
+            //GetUserRoles();
+            var user = await GetUsersById(new Guid("9b38397e-c459-4555-ba21-0992d4971c4c")); // Hardcoded user Id from Azure SQL server db
+            if(user != null)
+            {
+                CheckinButtonText = "CHECKED-IN";
+                User = user;
+            }
+            Audio.PlayBase64(speech);
+        }
+
+        // Gets all the User roles available in the database
+        private async void GetUserRoles()
+        {
+            var result = await webAPIService.GetUserRolesAsync();
+            if(result.Count > 0)
+            {
+                result.ToList().ForEach(role => UserRoles.Add(role));
+            }
+        }
+
+        // Gets the User by matching ID available in the database
+        private async Task<User> GetUsersById(Guid id)
+        {
+            var result = await webAPIService.GetUserByIdAsync(id);
+            return result;
         }
         private void ExecuteMuteCommand()
         {
