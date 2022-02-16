@@ -109,7 +109,7 @@ namespace AI4Good.ViewModels
 
         private async Task LoginCommandExecute()
         {
-            webAPIService = new WebAPIService();
+            webAPIService = new WebAPIService("Values");
             var loggedInUser = await webAPIService.GetUserByIdAsync(new Guid("e08555a0-1faf-4788-bc62-d4f252465854"));
             if(loggedInUser != null)
             {

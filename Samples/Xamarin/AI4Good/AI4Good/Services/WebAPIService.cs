@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,17 +27,17 @@ namespace AI4Good.Services
         }
 
 
-        public WebAPIService()
+        public WebAPIService(string controllerName)
         {
             _client = new HttpClient();
-            _webAPIUrl = "https://ai4gooddemo.azurewebsites.net/api/Values/";
+            _webAPIUrl = $"https://ai4gooddemo.azurewebsites.net/api/{controllerName}/";
         }
 
         public async Task<ObservableCollection<UserRole>> GetUserRolesAsync()
         {
             try
             {
-                var response = await _client.GetAsync(GetUpdatedUri(""));
+                var response = await _client.GetAsync(GetUpdatedUri("", ""));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -55,7 +56,7 @@ namespace AI4Good.Services
         {
             try
             {
-                var response = await _client.GetAsync(GetUpdatedUri(id.ToString()));
+                var response = await _client.GetAsync(GetUpdatedUri("", id.ToString()));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -70,9 +71,44 @@ namespace AI4Good.Services
             return null;
         }
 
-        private Uri GetUpdatedUri(string param)
+        public async Task<List<Item>> GetItemsToPickAsync()
         {
-            _webAPIUrl += param.ToString();
+            try
+            {
+                var response = await _client.GetAsync(GetUpdatedUri("GetItemsToPick", ""));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<Item>>(content);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return null;
+        }
+
+        public async Task UpatePickedItemsByIdsAsync(string itemIds)
+        {
+            try
+            {
+                var response = await _client.GetAsync(GetUpdatedUri("UpdatePickedItemsByIds", itemIds));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    JsonConvert.DeserializeObject<List<Item>>(content);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private Uri GetUpdatedUri(string actionName, string param)
+        {
+            _webAPIUrl += $"{actionName}/{param.ToString()}";
             return new Uri(_webAPIUrl);
         }
     }

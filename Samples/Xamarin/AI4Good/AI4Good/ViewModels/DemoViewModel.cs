@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,18 +21,61 @@ namespace AI4Good.ViewModels
         WebAPIService webAPIService;
         public ObservableCollection<Conversation> Conversations { get; set; }
         public ObservableCollection<UserRole> UserRoles { get; set; }
+        public ObservableCollection<Item> ItemsToPick { get; set; }
+        public Item NextItemToPick { get; set; }
+        public List<Item> ItemsPicked { get; set; }
         public User User { get; set; }
+        public string ScannedItemIds { get; set; }
 
-        string _checkinButtonText;
-        public string CheckinButtonText
+        string _itemPickingErrorText = "";
+        public string ItemPickingErrorText
         {
             get
             {
-                return _checkinButtonText;
+                return _itemPickingErrorText;
             }
             set
             {
-                SetProperty(ref _checkinButtonText, value);
+                SetProperty(ref _itemPickingErrorText, value);
+            }
+        }
+
+        bool _isItemPickingErrorTextVisible;
+        public bool IsItemPickingErrorTextVisible
+        {
+            get
+            {
+                return _isItemPickingErrorTextVisible;
+            }
+            set
+            {
+                SetProperty(ref _isItemPickingErrorTextVisible, value);
+            }
+        }
+
+        string _apiCallButtonText;
+        public string APICallButtonText
+        {
+            get
+            {
+                return _apiCallButtonText;
+            }
+            set
+            {
+                SetProperty(ref _apiCallButtonText, value);
+            }
+        }
+
+        string _textColor;
+        public string TextColor
+        {
+            get
+            {
+                return _textColor;
+            }
+            set
+            {
+                SetProperty(ref _textColor, value);
             }
         }
 
@@ -67,6 +111,9 @@ namespace AI4Good.ViewModels
         {
             Conversations = new ObservableCollection<Conversation>();
             UserRoles = new ObservableCollection<UserRole>();
+            ItemsToPick = new ObservableCollection<Item>();
+            ItemsPicked = new List<Item>();
+            ScannedItemIds = "";
             MuteText = "MUTE";
             InitializeCommands();
             InitializeAudioServices();
@@ -153,7 +200,7 @@ namespace AI4Good.ViewModels
             hubConnector.TTSResponseDelegate += HubConnector_TTSResponseDelegate;
             hubConnector.StartAsync();
             await Task.Delay(500);
-            CheckinButtonText = "CHECK-IN";
+            APICallButtonText = "Get Items";
             CurrentSpeech = "We invite you to experience the future of AI that will empower your employees with disabilities to pick a warehouse order and inspire your team.";
             Conversations.Add(new Conversation { IsAI = true, Message = CurrentSpeech });
 
@@ -188,7 +235,9 @@ namespace AI4Good.ViewModels
         public Command NoCommand { get; set; }
         public Command RepeatCommand { get; set; }
         public Command HelpCommand { get; set; }
-        public Command CheckinCommand { get; set; }
+        public Command GetItemsToPickCommand { get; set; }
+        public Command PickItemCommand { get; set; }
+
         private void InitializeCommands()
         {
             MuteCommand = new Command(() => ExecuteMuteCommand());
@@ -196,7 +245,68 @@ namespace AI4Good.ViewModels
             NoCommand = new Command(() => ExecuteNoCommand());
             RepeatCommand = new Command(() => ExecuteRepeatCommand());
             HelpCommand = new Command(() => ExecuteHelpCommand());
-            CheckinCommand = new Command(() => ExecuteCheckinCommand());
+            //CheckinCommand = new Command(() => ExecuteCheckinCommand());
+            GetItemsToPickCommand = new Command(() => GetItemsToPick());
+            PickItemCommand = new Command(async (e) => await ExecutePickItemCommand(e));
+        }
+
+        private async Task ExecutePickItemCommand(object selectedItem)
+        {
+            var item = (Item)selectedItem;
+            var currentItemIndex = ItemsToPick.IndexOf(item);
+            if(currentItemIndex != -1 && currentItemIndex < ItemsToPick.Count)
+            {
+                if(NextItemToPick != null && NextItemToPick.ItemId != item.ItemId)
+                {
+                    ItemPickingErrorText = "Item picked out of order. Please pick item at the top.";
+                    IsItemPickingErrorTextVisible = true;
+                    TextColor = "Red";
+                }
+                else if (NextItemToPick == null && currentItemIndex != 0)
+                { // first item being clicked upon. Check if it's the first item in the list
+                    ItemPickingErrorText = "Item picked out of order. Please pick item at the top.";
+                    IsItemPickingErrorTextVisible = true;
+                    TextColor = "Red";
+                }
+                else
+                {
+                    if(ItemsToPick.Count > 1)
+                    {
+                        NextItemToPick = ItemsToPick[currentItemIndex + 1];
+                    }
+                    ItemsPicked.Add(ItemsToPick[currentItemIndex]);
+                    IsItemPickingErrorTextVisible = false;
+                    if (currentItemIndex == ItemsToPick.Count - 1)
+                    {   // Last item. Make an Update API call
+                        
+                        webAPIService = new WebAPIService("picking");
+                        var scannedItemIds = "";
+                        var scannedItemCount = ItemsPicked.Count;
+                        for (int i=0; i< scannedItemCount; i++)
+                            scannedItemIds += i == scannedItemCount-1 ? $"{ItemsPicked[i].ItemId}" : $"{ItemsPicked[i].ItemId},";
+                        try
+                        {
+                            await webAPIService.UpatePickedItemsByIdsAsync(scannedItemIds);
+                            NextItemToPick = null;
+                            ItemsPicked.Clear();
+                            ItemPickingErrorText = "Congratulations! Items in the Order picked successfully. \n Click GET ITEMS to fetch items from next order";
+                            IsItemPickingErrorTextVisible = true;
+                            TextColor = "Green";
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+                    }
+                    
+                    ItemsToPick.Remove(ItemsToPick[currentItemIndex]);
+                }
+            }
+            
+        }
+        private void UpdatePickedItems()
+        {
+
         }
         private void ExecuteYesCommand()
         {
@@ -223,24 +333,32 @@ namespace AI4Good.ViewModels
         private async void ExecuteCheckinCommand()
         {
             var speech = "Call made successfully";
-            webAPIService = new WebAPIService();
+            webAPIService = new WebAPIService("values");
             //GetUserRoles();
             var user = await GetUsersById(new Guid("9b38397e-c459-4555-ba21-0992d4971c4c")); // Hardcoded user Id from Azure SQL server db
             if(user != null)
             {
-                CheckinButtonText = "CHECKED-IN";
+                APICallButtonText = "CHECKED-IN";
                 User = user;
             }
             Audio.PlayBase64(speech);
         }
 
-        // Gets all the User roles available in the database
-        private async void GetUserRoles()
+        // Get Items for Picking
+        private async void GetItemsToPick()
         {
-            var result = await webAPIService.GetUserRolesAsync();
+            webAPIService = new WebAPIService("picking");
+            var result = await webAPIService.GetItemsToPickAsync();
             if(result.Count > 0)
             {
-                result.ToList().ForEach(role => UserRoles.Add(role));
+                result.ToList().ForEach(item => {
+                    ItemsToPick.Add(item);
+                });
+            } else
+            {
+                ItemPickingErrorText = "No Orders avaialble for picking. Please try again later.";
+                IsItemPickingErrorTextVisible = true;
+                TextColor = "Red";
             }
         }
 
