@@ -121,9 +121,6 @@
                 </ListView>
                 <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ItemPickingErrorText}" 
                     VerticalOptions="End" HorizontalOptions="Center" Margin="40,0,0,0" HorizontalTextAlignment="Center" TextColor="{Binding TextColor}" IsVisible="{Binding IsItemPickingErrorTextVisible}"/>
-                <Image Grid.Row="3" Grid.Column="0" Source="voice_command" HorizontalOptions="Start" VerticalOptions="Start" Margin="10,16,10,2" HeightRequest="40" WidthRequest="40" Aspect="AspectFit"/>
-                <Label Grid.Row="3" Grid.Column="1" Text="{Binding CurrentSpeech}" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#1E3D73" Margin="60,10,20,0"/>
-                <Button Grid.Row="3" Grid.Column="2" Text="{Binding MuteText}" HorizontalOptions="End" VerticalOptions="End" BackgroundColor="#3269C3" TextColor="#FFFFFF" Margin="4" Command="{Binding MuteCommand}"></Button>
             </Grid>
       </Grid>
   </ContentPage.Content>

@@ -256,17 +256,9 @@ namespace AI4Good.ViewModels
             var currentItemIndex = ItemsToPick.IndexOf(item);
             if(currentItemIndex != -1 && currentItemIndex < ItemsToPick.Count)
             {
-                if(NextItemToPick != null && NextItemToPick.ItemId != item.ItemId)
-                {
-                    ItemPickingErrorText = "Item picked out of order. Please pick item at the top.";
-                    IsItemPickingErrorTextVisible = true;
-                    TextColor = "Red";
-                }
-                else if (NextItemToPick == null && currentItemIndex != 0)
-                { // first item being clicked upon. Check if it's the first item in the list
-                    ItemPickingErrorText = "Item picked out of order. Please pick item at the top.";
-                    IsItemPickingErrorTextVisible = true;
-                    TextColor = "Red";
+                if((NextItemToPick != null && NextItemToPick.ItemId != item.ItemId) || (NextItemToPick == null && currentItemIndex != 0))
+                {// Out of order item picked or First item being clicked upon. Check if it's the first item in the list
+                    DisplayUserMessage(true, "Item picked out of order. Please pick item at the top.", "Red");
                 }
                 else
                 {
@@ -289,9 +281,7 @@ namespace AI4Good.ViewModels
                             await webAPIService.UpatePickedItemsByIdsAsync(scannedItemIds);
                             NextItemToPick = null;
                             ItemsPicked.Clear();
-                            ItemPickingErrorText = "Congratulations! Items in the Order picked successfully. \n Click GET ITEMS to fetch items from next order";
-                            IsItemPickingErrorTextVisible = true;
-                            TextColor = "Green";
+                            DisplayUserMessage(true, "Congratulations! Items in the Order picked successfully. \n Click GET ITEMS to fetch items from next order", "Green");
                         }
                         catch (Exception ex)
                         {
@@ -304,9 +294,12 @@ namespace AI4Good.ViewModels
             }
             
         }
-        private void UpdatePickedItems()
-        {
 
+        private void DisplayUserMessage(bool showMessage = false, string message = "", string color = "Red")
+        {
+            IsItemPickingErrorTextVisible = showMessage;
+            ItemPickingErrorText = message;
+            TextColor = color;
         }
         private void ExecuteYesCommand()
         {
@@ -351,15 +344,13 @@ namespace AI4Good.ViewModels
             var result = await webAPIService.GetItemsToPickAsync();
             if(result.Count > 0)
             {
+                DisplayUserMessage(false, "", "");
                 result.ToList().ForEach(item => {
                     ItemsToPick.Add(item);
                 });
-            } else
-            {
-                ItemPickingErrorText = "No Orders avaialble for picking. Please try again later.";
-                IsItemPickingErrorTextVisible = true;
-                TextColor = "Red";
             }
+            else
+                DisplayUserMessage(true, "No Orders avaialble for picking. Please try again later.", "Red");
         }
 
         // Gets the User by matching ID available in the database
