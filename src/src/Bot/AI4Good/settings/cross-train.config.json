@@ -1,0 +1,20 @@
+{
+  "AI4Good.en-us": {
+    "rootDialog": true,
+    "triggers": {
+      "": [
+        "Workflow.en-us"
+      ],
+      "Help": [
+        "Help.en-us"
+      ],
+      "OrderPicking": [
+        "Picking.en-us"
+      ],
+      "Pack": "",
+      "Ship": "",
+      "CycleCount": "",
+      "WorkflowPrompt": ""
+    }
+  }
+}

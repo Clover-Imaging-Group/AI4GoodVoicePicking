@@ -1,0 +1,7 @@
+{
+  "$kind": "Microsoft.QnAMakerRecognizer",
+  "id": "QnA_AI4Good",
+  "knowledgeBaseId": "=settings.qna.AI4Good_en_us_qna",
+  "hostname": "=settings.qna.hostname",
+  "endpointKey": "=settings.qna.endpointKey"
+}

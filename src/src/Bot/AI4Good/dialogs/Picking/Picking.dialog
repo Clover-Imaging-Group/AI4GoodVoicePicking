@@ -1,0 +1,184 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "Uziv61",
+    "name": "Picking",
+    "comment": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "xxp6Vq"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "BkadG0"
+          },
+          "resultProperty": "dialog.api_response",
+          "method": "GET",
+          "contentType": "application/json",
+          "responseType": "json",
+          "url": "https://conversationalai-api.azurewebsites.net/GetAvailable"
+        },
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "MjkKc2"
+          },
+          "index": "dialog.foreach.index",
+          "value": "dialog.foreach.value",
+          "itemsProperty": "dialog.api_response.content.warehouseEquipment",
+          "actions": [
+            {
+              "$kind": "Microsoft.EditArray",
+              "$designer": {
+                "id": "2zzioT"
+              },
+              "changeType": "push",
+              "itemsProperty": "dialog.choices",
+              "value": "={value:dialog.foreach.value.displayName}"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "CT5FNR"
+          },
+          "condition": "=count(dialog.choices) > 0",
+          "actions": [],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "BMXL5F"
+              },
+              "activity": "${SendActivity_BMXL5F()}"
+            },
+            {
+              "$kind": "Microsoft.SetProperties",
+              "$designer": {
+                "id": "rfjOiD"
+              },
+              "assignments": [
+                {
+                  "property": "dialog.api_response",
+                  "value": "null"
+                },
+                {
+                  "property": "dialog.choices",
+                  "value": "null"
+                },
+                {
+                  "property": "user.itemPicked",
+                  "value": "null"
+                }
+              ]
+            },
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "w7ALpZ"
+              },
+              "activity": "${SendActivity_w7ALpZ()}"
+            },
+            {
+              "$kind": "Microsoft.HttpRequest",
+              "$designer": {
+                "id": "ztadG8"
+              },
+              "resultProperty": "turn.results",
+              "method": "GET",
+              "url": "https://conversationalai-api.azurewebsites.net/restock"
+            },
+            {
+              "$kind": "Microsoft.BeginDialog",
+              "$designer": {
+                "id": "r4M5vl"
+              },
+              "activityProcessed": true,
+              "dialog": "Workflow"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "xRY6zT"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${ChoiceInput_Prompt_xRY6zT()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or ",
+            "inlineSeparator": ", "
+          },
+          "choices": "=dialog.choices",
+          "style": "suggestedAction",
+          "property": "user.itemPicked"
+        },
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "HtS9N4"
+          },
+          "resultProperty": "dialog.api_response",
+          "method": "GET",
+          "url": "https://conversationalai-api.azurewebsites.net/PickItem?equipment=${user.itemPicked}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "fCisax"
+          },
+          "activity": "${SendActivity_fCisax()}"
+        },
+        {
+          "$kind": "Microsoft.SetProperties",
+          "$designer": {
+            "id": "2Xj6If"
+          },
+          "assignments": [
+            {
+              "property": "dialog.api_response",
+              "value": "null"
+            },
+            {
+              "property": "user.itemPicked",
+              "value": "null"
+            },
+            {
+              "property": "dialog.choices",
+              "value": "null"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.RepeatDialog",
+          "$designer": {
+            "id": "rL87XD"
+          },
+          "activityProcessed": true
+        }
+      ]
+    }
+  ],
+  "generator": "Picking.lg",
+  "recognizer": "Picking.lu.qna",
+  "id": "Picking"
+}

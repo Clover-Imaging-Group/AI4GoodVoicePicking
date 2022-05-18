@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AI4Good.ViewModels"
+             mc:Ignorable="d"
+             x:Class="AI4Good.Views.DemoPage" BackgroundColor="Red" NavigationPage.HasNavigationBar="False"
+             x:Name="DemoViewPage">
+    <ContentPage.BindingContext>
+        <vm:DemoViewModel  x:Name="DemoPageVM"/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+      <Grid ColumnSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+            <Grid BackgroundColor="#F9F9F7" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <BoxView BackgroundColor="#000000" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                <Label Text="Voice Log" TextColor="#FFFFFF" Grid.Row="0" VerticalOptions="Center"/>
+                <ListView x:Name="ConversationList" Grid.Row="1" ItemsSource="{Binding Conversations}" SeparatorVisibility="None" ItemAppearing="ConversationList_ItemAppearing"
+                      HasUnevenRows="True" HorizontalOptions="Fill" VerticalOptions="Fill" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid VerticalOptions="Start" Margin="4,4,4,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="48"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="48"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame CornerRadius="24" Grid.Column="0" IsClippedToBounds="True" HorizontalOptions="Fill" 
+                                    Padding="0" VerticalOptions="Start" IsVisible="{Binding ShowAIImage}">
+                                        <Image Source="{Binding AIImageSource}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Frame>
+                                    <Frame CornerRadius="10" Grid.Column="{Binding GridColumn}" Grid.ColumnSpan="2" IsClippedToBounds="True" 
+                                    HorizontalOptions="Fill" Padding="0" VerticalOptions="Fill" Margin="10,2,0,2" >
+                                        <BoxView Color="LightGray"  Grid.ColumnSpan="2" Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                    </Frame>
+                                    <Grid Grid.Column="{Binding GridColumn}" Grid.ColumnSpan="2" Margin="0,0,2,2" >
+                                        <Frame CornerRadius="10" IsClippedToBounds="True" 
+                                            HorizontalOptions="Fill" Padding="0" VerticalOptions="Fill" >
+                                            <BoxView Color="{Binding ConversationColor}"  Grid.ColumnSpan="2" Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                        </Frame>
+                                        <Label Margin="4" Text="{Binding Message}"/>
+                                    </Grid>
+                                    <!--<Frame CornerRadius="24" Grid.Column="2" IsClippedToBounds="True" HorizontalOptions="Fill" 
+                                    Padding="0" VerticalOptions="End" IsVisible="{Binding ShowUserImage}">
+                                        <Image Source="{Binding UserImageSource}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Frame>-->
+
+                                    <Image Source="{Binding UserImageSource}"  Grid.Column="2" HorizontalOptions="Fill" 
+                                     VerticalOptions="End" IsVisible="{Binding ShowUserImage}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+             
+            <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" BackgroundColor="#FFFFFF" Grid.Column="1">
+                <StackLayout Orientation="Vertical" VerticalOptions="Start" HorizontalOptions="Fill">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Image Source="voice_command" HorizontalOptions="Start" VerticalOptions="Start" Margin="10,16,10,2" HeightRequest="40" WidthRequest="40" Aspect="AspectFit"/>
+                        <!--<Button Text="{Binding MuteText}" HorizontalOptions="End" VerticalOptions="End" BackgroundColor="#3269C3" TextColor="#FFFFFF" Margin="4" Command="{Binding MuteCommand}"/>-->
+                        <Label Text="{Binding CurrentSpeech}" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#1E3D73" Margin="60,10,20,0"/>
+                    </StackLayout>
+                    
+                    <!--<StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Entry WidthRequest="100" Text="{Binding MessageInput}" HorizontalOptions="Fill" VerticalOptions="Start" TextColor="#1E3D73" IsVisible="{Binding IsSendVisible}"  Margin="60,10,20,0"/>
+                        <Button Text="Send" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#1E3D73" Margin="60,10,20,0" IsVisible="{Binding IsSendVisible}" Command="{Binding SendCommand}"/>
+                    </StackLayout>-->
+                </StackLayout>
+
+                <ListView x:Name="AvailableActions" ItemsSource="{Binding AvailableActions}" SeparatorVisibility="None" HasUnevenRows="True" HorizontalOptions="Fill" VerticalOptions="Fill" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Grid.Column="{Binding GridColumn}" Grid.ColumnSpan="1" Margin="0,0,2,2" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="225"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Button Text="{Binding ActionText}"
+                                            Command="{Binding BindingContext.SelectActionCommand, Source={x:Reference Name=DemoViewPage}}"
+                                            CommandParameter="{Binding .}"
+                                            Grid.Column="0"
+                                            BackgroundColor="#3A4235"
+                                            TextColor="#FFFFFF"
+                                            Margin="4" ></Button>
+                                    
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Text="{Binding ItemPickingErrorText}" 
+                    VerticalOptions="End" HorizontalOptions="Center" Margin="40,0,0,0" HorizontalTextAlignment="Center" TextColor="{Binding TextColor}" IsVisible="{Binding IsItemPickingErrorTextVisible}"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Vertical" BackgroundColor="#F9F9F7" Grid.Column="2">
+                <StackLayout Orientation="Vertical" IsVisible="{Binding AreOptionsVisible}">
+                    <Button Text="PICK" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding OptionsCommand}" CommandParameter="PICK"></Button>
+                    <Button Text="PACK" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding OptionsCommand}" CommandParameter="PACK"></Button>
+                    <Button Text="SHIP" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding OptionsCommand}" CommandParameter="SHIP"></Button>
+                    <Button Text="CycleCount" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding OptionsCommand}" CommandParameter="CYCLE"></Button>
+                </StackLayout>
+                <Button Text="REPEAT"  BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding RepeatCommand}"></Button>
+                <Button Text="HELP"  BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding HelpCommand}"></Button>
+                <Button Text="YES" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding YesCommand}"></Button>
+                <Button Text="NO" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding NoCommand}"></Button>
+                <Button Text="MENU"  BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding MenuCommand}"></Button>
+                <!--<StackLayout Orientation="Vertical" IsVisible="{Binding AreOptionsVisible}">
+                </StackLayout>-->
+            </StackLayout>
+      </Grid>
+  </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,31 @@
+[import](common.lg)
+
+# ChoiceInput_Prompt_xRY6zT()
+[Activity
+    Text = ${ChoiceInput_Prompt_xRY6zT_text()}
+]
+
+# ChoiceInput_Prompt_xRY6zT_text()
+- Which item would you pick next?
+- Please pick an item
+# SendActivity_fCisax()
+[Activity
+    Text = ${SendActivity_fCisax_text()}
+]
+
+# SendActivity_fCisax_text()
+- ${dialog.api_response.content}
+# SendActivity_BMXL5F()
+[Activity
+    Text = ${SendActivity_BMXL5F_text()}
+]
+
+# SendActivity_BMXL5F_text()
+- All items in the warehouse have been picked. Thank you.
+# SendActivity_w7ALpZ()
+[Activity
+    Text = ${SendActivity_w7ALpZ_text()}
+]
+
+# SendActivity_w7ALpZ_text()
+- Restocking the warehouse

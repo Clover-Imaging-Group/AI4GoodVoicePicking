@@ -1,0 +1,10 @@
+[import](common.lg)
+
+# ChoiceInput_Prompt_3IOliq()
+[Activity
+    Text = ${ChoiceInput_Prompt_3IOliq_text()}
+]
+
+# ChoiceInput_Prompt_3IOliq_text()
+- What would you like to do today?
+- Please select an option
