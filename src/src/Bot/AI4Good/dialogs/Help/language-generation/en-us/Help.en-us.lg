@@ -1,0 +1,9 @@
+[import](common.lg)
+
+# SendActivity_qKr250()
+[Activity
+    Text = ${SendActivity_qKr250_text()}
+]
+
+# SendActivity_qKr250_text()
+- Someone is on the way to help you

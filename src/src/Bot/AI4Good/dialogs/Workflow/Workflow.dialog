@@ -1,0 +1,61 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "bKw5Ls",
+    "name": "Workflow",
+    "comment": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "5yM2QI"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "3IOliq"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 1,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${ChoiceInput_Prompt_3IOliq()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or ",
+            "inlineSeparator": ", "
+          },
+          "choices": [
+            "Pick",
+            "Pack",
+            "Ship",
+            "CycleCount"
+          ],
+          "recognizerOptions": {
+            "recognizeOrdinals": true
+          },
+          "property": "user.workoption"
+        },
+        {
+          "$kind": "Microsoft.EndDialog",
+          "$designer": {
+            "id": "ttX9yU"
+          }
+        }
+      ]
+    }
+  ],
+  "generator": "Workflow.lg",
+  "recognizer": "Workflow.lu.qna",
+  "id": "Workflow"
+}

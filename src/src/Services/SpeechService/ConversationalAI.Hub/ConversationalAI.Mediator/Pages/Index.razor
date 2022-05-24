@@ -1,0 +1,56 @@
+@* @page "/" *@
+@* *@
+@* <h1>Hello, world!</h1> *@
+@* *@
+@* Welcome to your new app. *@
+@* *@
+@* <SurveyPrompt Title="How is Blazor working for you?"/> *@
+
+@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavigationManager
+@implements IAsyncDisposable
+
+<PageTitle>Index</PageTitle>
+
+<hr>
+
+<ul id="messagesList">
+    @foreach (var message in _messages)
+    {
+        <li>@message</li>
+    }
+</ul>
+
+
+@code {
+    private HubConnection? _hubConnection;
+    private readonly List<string> _messages = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/conversationalhub"))
+            .Build();
+
+        _hubConnection.On<string, string, string, string>("LogReceive", (method, user, message, originalMessage) =>
+        {
+            var encodedMsg = $"method: {method}, {user}: {message}, original message: {originalMessage}";
+            _messages.Add(encodedMsg);
+            StateHasChanged();
+        });
+
+        if (_hubConnection != null) await _hubConnection.StartAsync();
+    }
+
+    public bool IsConnected =>
+        _hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection is not null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "$kind": "Microsoft.MultiLanguageRecognizer",
+  "id": "ORCHESTRATOR_AI4Good",
+  "recognizers": {
+    "en-us": "AI4Good.en-us.lu",
+    "": "AI4Good.en-us.lu"
+  }
+}

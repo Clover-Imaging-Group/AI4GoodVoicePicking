@@ -1,0 +1,43 @@
+{
+  "name": "AI4Good-CNCYDemo",
+  "environment": "dev",
+  "tenantId": "35cd3241-d250-4a26-93c8-ee676440a2b7",
+  "hostname": "ai4good-cncybothost",
+  "runtimeIdentifier": "win-x64",
+  "resourceGroup": "Capability-App-Products",
+  "botName": "AI4Good-CNCYDemo",
+  "subscriptionId": "30a5c4cb-24a7-458e-bbbc-aae924df3666",
+  "region": "northcentralus",
+  "appServiceOperatingSystem": "windows",
+  "scmHostDomain": "scm.azurewebsites.net:443",
+  "luisResource": "ConversationalAILUIS-Authoring",
+  "settings": {
+    "applicationInsights": {
+      "InstrumentationKey": "",
+      "connectionString": ""
+    },
+    "cosmosDb": {
+      "cosmosDBEndpoint": "",
+      "authKey": "",
+      "databaseId": "botstate-db",
+      "containerId": "botstate-container"
+    },
+    "blobStorage": {
+      "connectionString": "",
+      "container": ""
+    },
+    "luis": {
+      "authoringKey": "6e2ad591f3544eb5bcd6f3fc08812371",
+      "authoringEndpoint": "https://conversationalailuis-authoring.cognitiveservices.azure.com/",
+      "endpointKey": "151d11838116459f9e08173961147c5e",
+      "endpoint": "https://conversationalai-luis.cognitiveservices.azure.com/",
+      "region": "northcentralus"
+    },
+    "qna": {
+      "subscriptionKey": "a76957a6b6e1455db38a318b44d119e8",
+      "endpoint": "https://conversationalai-qnamaker.azurewebsites.net/qnamaker"
+    },
+    "MicrosoftAppId": "355911d9-bf08-48fb-987b-ce29266d96b0",
+    "MicrosoftAppPassword": "ZqO7Q~e6VKmQCAnxSntk9wauhhAdAhhGfhfa9"
+  }
+}
