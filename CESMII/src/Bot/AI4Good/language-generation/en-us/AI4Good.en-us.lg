@@ -1,0 +1,54 @@
+[import](common.lg)
+
+# SendActivity_Greeting()
+[Activity
+    Text = ${SendActivity_Greeting_text()}
+]
+
+# SendActivity_Greeting_text()
+- We invite you to experience the future of AI that will empower your employees with disabilities to pick a warehouse order and inspire your team.
+# SendActivity_DidNotUnderstand()
+[Activity
+    Text = ${SendActivity_DidNotUnderstand_text()}
+]
+
+# SendActivity_DidNotUnderstand_text()
+- Sorry, I didn't get that.
+
+# TextInput_Prompt_cuxM7k()
+[Activity
+    Text = ${expandText(@answer)}
+    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}
+]
+
+# SendActivity_Rgi2hd()
+- ${expandText(@answer)}
+
+# SendActivity_HLrKIm()
+[Activity
+    Text = ${SendActivity_HLrKIm_text()}
+]
+
+# SendActivity_HLrKIm_text()
+- Packing options have not been configured.
+# SendActivity_QvtzaZ()
+[Activity
+    Text = ${SendActivity_QvtzaZ_text()}
+]
+
+# SendActivity_QvtzaZ_text()
+- Shipping options have not been configured
+# SendActivity_DYkwCT()
+[Activity
+    Text = ${SendActivity_DYkwCT_text()}
+]
+
+# SendActivity_DYkwCT_text()
+- Cycle count has not been configured
+# ChoiceInput_Prompt_sI21uh()
+[Activity
+    Text = ${ChoiceInput_Prompt_sI21uh_text()}
+]
+
+# ChoiceInput_Prompt_sI21uh_text()
+- What would you like to do today?

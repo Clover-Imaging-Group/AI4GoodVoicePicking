@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:AI4Good.ViewModels"
              mc:Ignorable="d"
-             x:Class="AI4Good.Views.DemoPage" BackgroundColor="Red" NavigationPage.HasNavigationBar="False">
+             x:Class="AI4Good.Views.DemoPage" BackgroundColor="Red" NavigationPage.HasNavigationBar="False"
+             x:Name="DemoViewPage">
     <ContentPage.BindingContext>
         <vm:DemoViewModel  x:Name="DemoPageVM"/>
     </ContentPage.BindingContext>
@@ -69,17 +70,57 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="45"/>
                         <RowDefinition Height="45"/>
+                        <RowDefinition Height="45"/>
                     </Grid.RowDefinitions>
-                    <Button Text="YES" Grid.Row="0" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding YesCommand}"></Button>
+                    <Button Text="YES" Grid.Row="2" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding YesCommand}"></Button>
                     <Button Text="NO" Grid.Row="0" Grid.Column="1" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding NoCommand}"></Button>
                     <Button Text="REPEAT" Grid.Row="1" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding RepeatCommand}"></Button>
                     <Button Text="HELP" Grid.Row="1" Grid.Column="1" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding HelpCommand}"></Button>
+                    <Button Text="{Binding APICallButtonText}" Grid.Row="0" Grid.Column="0" BackgroundColor="#3A4235" TextColor="#FFFFFF" Margin="4" Command="{Binding GetItemsToPickCommand}"></Button>
                 </Grid>
             </Grid>
             <Grid BackgroundColor="#FFFFFF" Grid.Column="1">
-                <Image Source="voice_command" HorizontalOptions="Start" VerticalOptions="Start" Margin="10,16,10,2" HeightRequest="40" WidthRequest="40" Aspect="AspectFit"/>
-                <Label Text="{Binding CurrentSpeech}" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#1E3D73" Margin="60,10,20,0"/>
-                <Button Text="{Binding MuteText}" HorizontalOptions="End" VerticalOptions="End" BackgroundColor="#3269C3" TextColor="#FFFFFF" Margin="4" Command="{Binding MuteCommand}"></Button>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="32"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <BoxView BackgroundColor="#000000" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                <ListView x:Name="ItemsListToPickFrom" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding ItemsToPick}" SeparatorVisibility="None" ItemAppearing="ConversationList1_ItemAppearing"
+                      HasUnevenRows="True" HorizontalOptions="Fill" VerticalOptions="Fill" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Grid.Column="{Binding GridColumn}" Grid.ColumnSpan="1" Margin="0,0,2,2" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="64"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Label Grid.Column="0" Margin="4" Text="{Binding Name}"/>
+                                    <Label Grid.Column="1" Margin="4" Text="{Binding ItemId}"/>
+                                    <Button Text="Pick"
+                                            Command="{Binding BindingContext.PickItemCommand, Source={x:Reference Name=DemoViewPage}}"
+                                            CommandParameter="{Binding .}"
+                                            Grid.Column="2"
+                                            BackgroundColor="#3A4235"
+                                            TextColor="#FFFFFF"
+                                            Margin="4" ></Button>
+                                    
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ItemPickingErrorText}" 
+                    VerticalOptions="End" HorizontalOptions="Center" Margin="40,0,0,0" HorizontalTextAlignment="Center" TextColor="{Binding TextColor}" IsVisible="{Binding IsItemPickingErrorTextVisible}"/>
             </Grid>
       </Grid>
   </ContentPage.Content>

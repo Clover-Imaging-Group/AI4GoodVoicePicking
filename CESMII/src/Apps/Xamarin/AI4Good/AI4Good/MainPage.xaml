@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AI4Good.ViewModels"
+             mc:Ignorable="d"
+             x:Class="AI4Good.MainPage" BackgroundColor="White" NavigationPage.HasNavigationBar="False">
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel  x:Name="MainPageVM"/>
+    </ContentPage.BindingContext>
+
+    <Grid >
+        <Grid IsVisible="{Binding IsLoginLayoutVisible}" BackgroundColor="White">
+            <Grid.RowDefinitions>
+            <!--2 rows (username and password) 2 columsn (username/password label username/password text box)-->
+                <RowDefinition Height="45" /> <!--image-->
+                <RowDefinition Height="45" /> <!--label text-->
+                <RowDefinition Height="45" /> <!--Username-->
+                <RowDefinition Height="45" /> <!--Password-->
+                <RowDefinition Height="45" /> <!--Login Response Message-->
+                <RowDefinition Height="45" /> <!--Login or Start Demo button-->
+            
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="58*"/>
+                <ColumnDefinition Width="58*"/>
+            </Grid.ColumnDefinitions>
+        
+            <Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Source="splash_screen" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFit" Margin="60,60,60,80"/>
+            <!-- Place new controls here -->
+            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Empowering warehouse teams to increase productivity and culture through AI by providing job opportunities for adults with disabilities." 
+                VerticalOptions="End" HorizontalOptions="Center" Margin="10,0,10,50" HorizontalTextAlignment="Center" TextColor="Black"/>
+
+            <!--Login-->
+            <Label Grid.Row="2" Grid.Column="0" Text="Username: " 
+                VerticalOptions="End" HorizontalOptions="End" Margin="0,0,20,6" HorizontalTextAlignment="Start" TextColor="Black" IsVisible="{Binding IsLoginLayoutVisible}"/>
+            <Entry Grid.Row="2" Grid.Column="1" Placeholder="Please enter Username" IsVisible="{Binding IsLoginLayoutVisible}"
+                HorizontalOptions="Start" HorizontalTextAlignment="Center" Text="AI4GoodUser" />
+
+            <Label Grid.Row="3" Grid.Column="0" Text="Password: " 
+                VerticalOptions="End" Margin="0,0,20,6" HorizontalOptions="End" HorizontalTextAlignment="Start" TextColor="Black" IsVisible="{Binding IsLoginLayoutVisible}"/>
+            <Entry Grid.Row="3" Grid.Column="1"
+                   Placeholder="Please enter password" IsVisible="{Binding IsLoginLayoutVisible}"
+                   HorizontalOptions="Start" HorizontalTextAlignment="Center"
+                   Text="P@ssword99" IsPassword="True"
+                   />
+            <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding LoginResponseText}" 
+                VerticalOptions="End" HorizontalOptions="Center" Margin="40,0,0,0" HorizontalTextAlignment="Center" TextColor="Red" IsVisible="{Binding IsLoginFailed}"/>
+
+            <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="80,0,0,0" Text="Login"  VerticalOptions="End" HorizontalOptions="Center" Command="{Binding LoginCommand}" IsVisible="{Binding IsLoginLayoutVisible}"></Button>
+
+         
+        </Grid>
+            <Image Source="splashscreenImage" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFit" Margin="60,60,60,80" IsVisible="{Binding IsStartDemoButtonVisible}" />
+            <Label Margin="10,10,200,10" Text="{Binding LoginResponseText}" 
+                VerticalOptions="End" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Green" IsVisible="false"/>
+
+            <Button Margin="10,10,10,10" Text="START DEMO" IsVisible="{Binding IsStartDemoButtonVisible}"  VerticalOptions="End" HorizontalOptions="Center" Command="{Binding StartDemoCommand}"></Button>
+    </Grid>
+</ContentPage>

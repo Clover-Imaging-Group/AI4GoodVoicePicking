@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,7 +18,67 @@ namespace AI4Good.ViewModels
     public class DemoViewModel:BaseViewModel
     {
         #region properties
+        WebAPIService webAPIService;
         public ObservableCollection<Conversation> Conversations { get; set; }
+        public ObservableCollection<UserRole> UserRoles { get; set; }
+        public ObservableCollection<Item> ItemsToPick { get; set; }
+        public Item NextItemToPick { get; set; }
+        public List<Item> ItemsPicked { get; set; }
+        public User User { get; set; }
+        public string ScannedItemIds { get; set; }
+
+        string _itemPickingErrorText = "";
+        public string ItemPickingErrorText
+        {
+            get
+            {
+                return _itemPickingErrorText;
+            }
+            set
+            {
+                SetProperty(ref _itemPickingErrorText, value);
+            }
+        }
+
+        bool _isItemPickingErrorTextVisible;
+        public bool IsItemPickingErrorTextVisible
+        {
+            get
+            {
+                return _isItemPickingErrorTextVisible;
+            }
+            set
+            {
+                SetProperty(ref _isItemPickingErrorTextVisible, value);
+            }
+        }
+
+        string _apiCallButtonText;
+        public string APICallButtonText
+        {
+            get
+            {
+                return _apiCallButtonText;
+            }
+            set
+            {
+                SetProperty(ref _apiCallButtonText, value);
+            }
+        }
+
+        string _textColor;
+        public string TextColor
+        {
+            get
+            {
+                return _textColor;
+            }
+            set
+            {
+                SetProperty(ref _textColor, value);
+            }
+        }
+
         string _currentSpeech;
         public string CurrentSpeech
         {
@@ -48,6 +110,10 @@ namespace AI4Good.ViewModels
         public DemoViewModel()
         {
             Conversations = new ObservableCollection<Conversation>();
+            UserRoles = new ObservableCollection<UserRole>();
+            ItemsToPick = new ObservableCollection<Item>();
+            ItemsPicked = new List<Item>();
+            ScannedItemIds = "";
             MuteText = "MUTE";
             InitializeCommands();
             InitializeAudioServices();
@@ -134,6 +200,7 @@ namespace AI4Good.ViewModels
             hubConnector.TTSResponseDelegate += HubConnector_TTSResponseDelegate;
             hubConnector.StartAsync();
             await Task.Delay(500);
+            APICallButtonText = "Get Items";
             CurrentSpeech = "We invite you to experience the future of AI that will empower your employees with disabilities to pick a warehouse order and inspire your team.";
             Conversations.Add(new Conversation { IsAI = true, Message = CurrentSpeech });
 
@@ -168,6 +235,9 @@ namespace AI4Good.ViewModels
         public Command NoCommand { get; set; }
         public Command RepeatCommand { get; set; }
         public Command HelpCommand { get; set; }
+        public Command GetItemsToPickCommand { get; set; }
+        public Command PickItemCommand { get; set; }
+
         private void InitializeCommands()
         {
             MuteCommand = new Command(() => ExecuteMuteCommand());
@@ -175,6 +245,61 @@ namespace AI4Good.ViewModels
             NoCommand = new Command(() => ExecuteNoCommand());
             RepeatCommand = new Command(() => ExecuteRepeatCommand());
             HelpCommand = new Command(() => ExecuteHelpCommand());
+            //CheckinCommand = new Command(() => ExecuteCheckinCommand());
+            GetItemsToPickCommand = new Command(() => GetItemsToPick());
+            PickItemCommand = new Command(async (e) => await ExecutePickItemCommand(e));
+        }
+
+        private async Task ExecutePickItemCommand(object selectedItem)
+        {
+            var item = (Item)selectedItem;
+            var currentItemIndex = ItemsToPick.IndexOf(item);
+            if(currentItemIndex != -1 && currentItemIndex < ItemsToPick.Count)
+            {
+                if((NextItemToPick != null && NextItemToPick.ItemId != item.ItemId) || (NextItemToPick == null && currentItemIndex != 0))
+                {// Out of order item picked or First item being clicked upon. Check if it's the first item in the list
+                    DisplayUserMessage(true, "Item picked out of order. Please pick item at the top.", "Red");
+                }
+                else
+                {
+                    if(ItemsToPick.Count > 1)
+                    {
+                        NextItemToPick = ItemsToPick[currentItemIndex + 1];
+                    }
+                    ItemsPicked.Add(ItemsToPick[currentItemIndex]);
+                    IsItemPickingErrorTextVisible = false;
+                    if (currentItemIndex == ItemsToPick.Count - 1)
+                    {   // Last item. Make an Update API call
+                        
+                        webAPIService = new WebAPIService("picking");
+                        var scannedItemIds = "";
+                        var scannedItemCount = ItemsPicked.Count;
+                        for (int i=0; i< scannedItemCount; i++)
+                            scannedItemIds += i == scannedItemCount-1 ? $"{ItemsPicked[i].ItemId}" : $"{ItemsPicked[i].ItemId},";
+                        try
+                        {
+                            await webAPIService.UpatePickedItemsByIdsAsync(scannedItemIds);
+                            NextItemToPick = null;
+                            ItemsPicked.Clear();
+                            DisplayUserMessage(true, "Congratulations! Items in the Order picked successfully. \n Click GET ITEMS to fetch items from next order", "Green");
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+                    }
+                    
+                    ItemsToPick.Remove(ItemsToPick[currentItemIndex]);
+                }
+            }
+            
+        }
+
+        private void DisplayUserMessage(bool showMessage = false, string message = "", string color = "Red")
+        {
+            IsItemPickingErrorTextVisible = showMessage;
+            ItemPickingErrorText = message;
+            TextColor = color;
         }
         private void ExecuteYesCommand()
         {
@@ -197,6 +322,42 @@ namespace AI4Good.ViewModels
             lastAIText = CurrentSpeech;
             Conversations.Add(new Conversation { IsAI = true, Message = lastAIText });
             hubConnector.GetText2Speech("XamarinDemoApp", CurrentSpeech);
+        }
+        private async void ExecuteCheckinCommand()
+        {
+            var speech = "Call made successfully";
+            webAPIService = new WebAPIService("values");
+            //GetUserRoles();
+            var user = await GetUsersById(new Guid("9b38397e-c459-4555-ba21-0992d4971c4c")); // Hardcoded user Id from Azure SQL server db
+            if(user != null)
+            {
+                APICallButtonText = "CHECKED-IN";
+                User = user;
+            }
+            Audio.PlayBase64(speech);
+        }
+
+        // Get Items for Picking
+        private async void GetItemsToPick()
+        {
+            webAPIService = new WebAPIService("picking");
+            var result = await webAPIService.GetItemsToPickAsync();
+            if(result.Count > 0)
+            {
+                DisplayUserMessage(false, "", "");
+                result.ToList().ForEach(item => {
+                    ItemsToPick.Add(item);
+                });
+            }
+            else
+                DisplayUserMessage(true, "No Orders avaialble for picking. Please try again later.", "Red");
+        }
+
+        // Gets the User by matching ID available in the database
+        private async Task<User> GetUsersById(Guid id)
+        {
+            var result = await webAPIService.GetUserByIdAsync(id);
+            return result;
         }
         private void ExecuteMuteCommand()
         {

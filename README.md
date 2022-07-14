@@ -33,3 +33,6 @@ As this is our first open-sourced project we're working on how best people can c
 # Deploying The Sample Code
 1. [Updating appsettings.json](docs/APPSETTINGSJSON.md)
 1. [Ai4Good_ConversationalAi](docs/CONVERSATIONALAIDEPLOYMENT.md)
+
+# CESMII 
+1. CESMII related updates can be found in `CESMII` folder

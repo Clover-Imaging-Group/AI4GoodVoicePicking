@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversationalAI.Mediator", "ConversationalAI.Mediator\ConversationalAI.Mediator.csproj", "{E4D91E42-3171-4B0C-A974-1EF002E7E30D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversationalAI.Infrastructure", "ConversationalAI.Infrastructure\ConversationalAI.Infrastructure.csproj", "{93BFCE98-2931-48F9-8BDB-17D9E05CE697}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversationalAI.SpeechService", "ConversationalAI.SpeechService\ConversationalAI.SpeechService.csproj", "{A288227A-9005-408A-B2B8-C3FDA767691F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversationalAI.HubService", "ConversationalAI.HubService\ConversationalAI.HubService.csproj", "{0CEE559B-B23C-4EFA-AF79-4C6ED65E3775}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversationalAI.AzureFunctions", "ConversationalAI.AzureFunctions\ConversationalAI.AzureFunctions.csproj", "{4468ABDA-158D-418A-B7BF-5F191682FF09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4D91E42-3171-4B0C-A974-1EF002E7E30D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4D91E42-3171-4B0C-A974-1EF002E7E30D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4D91E42-3171-4B0C-A974-1EF002E7E30D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4D91E42-3171-4B0C-A974-1EF002E7E30D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93BFCE98-2931-48F9-8BDB-17D9E05CE697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93BFCE98-2931-48F9-8BDB-17D9E05CE697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93BFCE98-2931-48F9-8BDB-17D9E05CE697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93BFCE98-2931-48F9-8BDB-17D9E05CE697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A288227A-9005-408A-B2B8-C3FDA767691F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A288227A-9005-408A-B2B8-C3FDA767691F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A288227A-9005-408A-B2B8-C3FDA767691F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A288227A-9005-408A-B2B8-C3FDA767691F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CEE559B-B23C-4EFA-AF79-4C6ED65E3775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CEE559B-B23C-4EFA-AF79-4C6ED65E3775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CEE559B-B23C-4EFA-AF79-4C6ED65E3775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CEE559B-B23C-4EFA-AF79-4C6ED65E3775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4468ABDA-158D-418A-B7BF-5F191682FF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4468ABDA-158D-418A-B7BF-5F191682FF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4468ABDA-158D-418A-B7BF-5F191682FF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4468ABDA-158D-418A-B7BF-5F191682FF09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(RiderSharedRunConfigurations) = postSolution
+		File = ConversationalAI.Mediator\.run\Publish ConversationalAI.Mediator to Azure (3).run.xml
+	EndGlobalSection
+EndGlobal
